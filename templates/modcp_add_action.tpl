@@ -16,18 +16,16 @@ $(document).ready(function(){
             type: "POST",
             url: "ajax/modcp_action.php?type=search_account",
             data: "username="+username,
-            success: function(msg){
-            	var arr = msg.split("|");
-                if(arr[0] == '0') {
-                    $("#username_hints").html(arr[1]);
-                    $("#userid").val("0");
-                    $("#button_username").hide();
-                    $("#button_username_inactive").show();
-                } else {
-                    $("#username_hints").html(arr[2]);
-                    $("#userid").val(arr[1]);
+            dataType: "json",
+            success: function(data){
+                $("#username_hints").html(data.msg);
+                $("#userid").val(data.userid);
+                if (data.status) {
                     $("#button_username").show();
                     $("#button_username_inactive").hide();
+                } else {
+                    $("#button_username").hide();
+                    $("#button_username_inactive").show();
                 }
             }
         });
@@ -39,17 +37,16 @@ $(document).ready(function(){
             type: "POST",
             url: "ajax/modcp_action.php?type=search_good",
             data: "goodsid="+goodsid,
-            success: function(msg){
-                var arr = msg.split("|");
-                if(arr[0] == '0') {
-                    $("#goodsid_hints").html("&nbsp;<font color='red'>Vật phẩm không tồn tại, xin hãy nhập lại!</font>");
-                    $("#button_good").hide();
-                    $("#button_good_inactive").show();
-                } else {
-                    $("#goodsid_hints").html("&nbsp;<font color='green'><b>"+msg+"</b></font>");
-                    $("#goodsname").val(msg)
+            dataType: "json",
+            success: function(data){
+                $("#goodsid_hints").html(data.msg);
+                $("#goodsname").val(data.good);
+                if (data.status) {
                     $("#button_good").show();
                     $("#button_good_inactive").hide();
+                } else {
+                    $("#button_good").hide();
+                    $("#button_good_inactive").show();
                 }
             }
         });
@@ -62,17 +59,15 @@ $(document).ready(function(){
             type: "POST",
             url: "ajax/modcp_action.php?type=add_receiver",
             data: "username="+username+"&userid="+userid+"&groupid="+groupid,
-            success: function(msg){
-                var arr = msg.split("|");
-                if(arr[0] == '1') {
-                    $("#username_hints").html(arr[1]);
+            dataType: "json",
+            success: function(data){
+                $("#username_hints").html(data.msg);
+                if (data.status) {
                     $("#username").val("");
                     $("#userid").val(0);
                     $("#button_username").hide();
                     $("#button_username_inactive").show();
                     reload_actgroup(groupid);
-                } else {
-                    $("#username_hints").html(arr[1]);
                 }
             }
         });
@@ -86,18 +81,16 @@ $(document).ready(function(){
             type: "POST",
             url: "ajax/modcp_action.php?type=add_good",
             data: "goodsid="+goodsid+"&goodsnum="+goodsnum+"&groupid="+groupid+"&goodsname="+goodsname,
-            success: function(msg) {
-                var arr = msg.split("|");
-                if(arr[0] == '1') {
-                    $("#goodsid_hints").html("&nbsp;<font color='green'>Thêm thành công.</font>");
+            dataType: "json",
+            success: function(data) {
+                $("#goodsid_hints").html(data.msg);
+                if(data.status) {
                     $("#goodsid").val("");
                     $("#goodsnum").val(0);
                     $("#goodsname").val("");
                     $("#button_good").hide();
                     $("#button_good_inactive").show();
                     reload_actgroup(groupid);
-                } else {
-                    $("#goodsid_hints").html("&nbsp;<font color='red'>"+msg+"</font>");
                 }
             }
         });
@@ -110,18 +103,18 @@ function reload_actgroup(id){
     });
 }
 function delete_receiver(id,group){
-    $.get("ajax/modcp_action.php?type=del_receiver&userid="+id+"&groupid="+group, function(msg){
-        if(msg == 'OK'){
+    $.get("ajax/modcp_action.php?type=del_receiver&userid="+id+"&groupid="+group, function(data){
+        if(data.status){
             reload_actgroup(group);
         }
-    })
+    }, "json");
 }
 function delete_good(id,group){
-    $.get("ajax/modcp_action.php?type=del_good&goodsid="+id+"&groupid="+group, function(msg){
-        if(msg == 'OK'){
+    $.get("ajax/modcp_action.php?type=del_good&goodsid="+id+"&groupid="+group, function(data){
+        if(data.status){
             reload_actgroup(group);
         }
-    })
+    }, "json");
 }
 </script>
 

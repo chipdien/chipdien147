@@ -35,6 +35,7 @@ $smarty->cache_lifetime = 120;
 
 // Init Adodb
 include(DIR_ADODB.'/adodb.inc.php');
+include(DIR_ADODB."/adodb-errorpear.inc.php"); 
 $DB = NewADOConnection('mysql');
 $DB->Connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 $DB->Execute("SET NAMES 'utf8'");

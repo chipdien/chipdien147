@@ -1,14 +1,6 @@
 <?php
-
 if (!defined('IN_MEDIA')) die("Hack");
-include '../inc/config.php';
-
-// Maintaince Mode
-if (MAINTAINCE) {
-	echo "<h1 style='margin-top: 40px; text-align:center; width: 100%;'>May chu hien dang trong tinh trang bao tri.<br/>
-	Xin ban vui long tro lai sau!</h1>";
-	exit;
-}
+include ('../inc/config.php');
 
 // Init Session
 if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start('ob_gzhandler');
@@ -30,10 +22,18 @@ define('URL_NOW',$_SERVER["REQUEST_URI"]);
 if (!USER_AGENT || !IP) exit();
 
 // Init Adodb
-include('../libs/db/adodb.inc.php');
-include("../libs/db/adodb-errorpear.inc.php"); 
+include(DIR_ADODB.'/adodb.inc.php');
+include(DIR_ADODB."/adodb-errorpear.inc.php"); 
 $DB = NewADOConnection('mysql');
 $DB->Connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 $DB->Execute("SET NAMES 'utf8'");
+
+// Maintaince Mode
+if (MAINTAINCE || !$DB->IsConnected()) {
+	echo "<h1 style='margin-top: 40px; text-align:center; width: 100%;'>May chu hien dang trong tinh trang bao tri.<br/>
+	Xin ban vui long tro lai sau!</h1>";
+	exit;
+}
+
 
 ?>

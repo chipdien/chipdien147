@@ -1,7 +1,7 @@
 <?php
 define('IN_MEDIA',true);
-require './init.php';
-require('./functions.php');
+include dirname(__FILE__).'/inc/init.php';
+include dirname(__FILE__).'/inc/functions.php';
 
 if (!$_SESSION['id']) {
     header("Location: login.php");
